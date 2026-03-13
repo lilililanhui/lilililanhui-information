@@ -1,27 +1,36 @@
+"use client";
+
 import Image from "next/image";
 import { resumeData } from "@/data/resume";
-import { Github, Mail, MessageCircle } from "lucide-react";
+import { Github, Mail, MessageCircle, Briefcase, GraduationCap } from "lucide-react";
+import { useState } from "react";
+import GitHubContributions from "./GitHubContributions";
 
 export default function Sidebar() {
   const { contact, education } = resumeData;
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <aside className="col-span-12 lg:col-span-4 lg:pl-2 mt-0 lg:mt-0 order-1 lg:order-2">
       <div className="border border-newspaper border-opacity-90 p-4 bg-paper-dark/30 shadow-sm relative flex flex-col items-center min-h-[500px] justify-center">
         
         {/* Avatar */}
-        <div className="w-56 h-56 md:w-64 md:h-64 mb-8 border-4 border-newspaper p-1 bg-paper shadow-md rotate-2 hover:rotate-0 transition-transform duration-300 relative">
+        <div 
+          className="w-56 h-56 md:w-64 md:h-64 mb-8 border-4 border-newspaper p-1 bg-paper shadow-md rotate-2 hover:rotate-0 transition-transform duration-300 relative"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
           <Image 
-            src="/images/avatar.png"
+            src={isHovered ? "/images/avatar-no-glass.png" : "/images/avatar.png"}
             alt="Avatar" 
             fill
-            className="object-cover grayscale hover:grayscale-0 transition-all duration-500"
+            className="object-cover transition-all duration-500"
           />
         </div>
         
         {/* Profile Info */}
         <div className="w-full text-center space-y-4">
-          <div className="border-b border-newspaper border-dashed pb-6">
+          <div className="border-b border-newspaper/40 border-dashed pb-6">
             <h3 className="text-3xl font-black lowercase tracking-widest mb-2 font-headline">
               {contact.name || "lilililanhui"}
             </h3>
@@ -91,20 +100,63 @@ export default function Sidebar() {
             </div>
           </div>
 
-          <div className="pt-4 text-left w-full px-2 lg:px-2">
-            <div className="space-y-4">
-              {education.map((edu, i) => (
-                <div key={i} className="flex justify-between items-start border-b border-newspaper/10 pb-3 last:border-0 last:pb-0">
-                  <div className="flex flex-col">
-                    <span className="font-bold text-[15px] uppercase tracking-tight block">{edu.school}</span>
-                    <span className="font-serif italic text-gray-800 text-sm mt-1">{edu.degree}</span>
+          <div className="text-left w-full px-2 lg:px-2">
+            {/* Timeline Style */}
+            <div className="relative">
+              {/* Timeline vertical line */}
+              <div className="absolute left-3 top-2 bottom-2 w-0.5 bg-newspaper/30"></div>
+              
+              <div className="space-y-4">
+                {/* Work Experience - Tencent */}
+                <div className="relative pl-8">
+                  {/* Timeline dot */}
+                  <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-paper border-2 border-newspaper flex items-center justify-center">
+                    <Briefcase className="w-3 h-3" />
                   </div>
-                  <span className="text-xs font-bold tracking-widest text-gray-600 mt-0.5 pt-0.5 border-l-2 border-newspaper pl-2 ml-2 shrink-0">
-                    {edu.date}
-                  </span>
+                  {/* Content */}
+                  <div className="group">
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <span className="text-xs font-bold tracking-wider text-gray-500 border-b border-dashed border-newspaper/50">
+                        2022.06 - 至今
+                      </span>
+                    </div>
+                    <h4 className="font-black text-sm uppercase tracking-wide group-hover:text-gray-600 transition-colors">
+                      腾讯 (Tencent)
+                    </h4>
+                    <p className="text-xs text-gray-600 font-medium italic">
+                      前端开发工程师
+                    </p>
+                  </div>
                 </div>
-              ))}
+
+                {/* Education items */}
+                {education.map((edu, i) => (
+                  <div key={i} className="relative pl-8">
+                    {/* Timeline dot */}
+                    <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-paper border-2 border-newspaper flex items-center justify-center">
+                      <GraduationCap className="w-3 h-3" />
+                    </div>
+                    {/* Content */}
+                    <div className="group">
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <span className="text-xs font-bold tracking-wider text-gray-500 border-b border-dashed border-newspaper/50">
+                          {edu.date}
+                        </span>
+                      </div>
+                      <h4 className="font-black text-sm uppercase tracking-wide group-hover:text-gray-600 transition-colors">
+                        {edu.school}
+                      </h4>
+                      <p className="text-xs text-gray-600 font-medium italic">
+                        {edu.degree}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
+
+            {/* GitHub Contributions */}
+            <GitHubContributions username="lilililanhui" />
           </div>
         </div>
         
