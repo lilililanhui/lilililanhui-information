@@ -6,7 +6,7 @@ export default function Sidebar() {
   const { contact, education } = resumeData;
 
   return (
-    <aside className="col-span-12 lg:col-span-4 lg:pl-2 mt-10 lg:mt-0">
+    <aside className="col-span-12 lg:col-span-4 lg:pl-2 mt-0 lg:mt-0 order-1 lg:order-2">
       <div className="border border-newspaper border-opacity-90 p-4 bg-paper-dark/30 shadow-sm relative flex flex-col items-center min-h-[500px] justify-center">
         
         {/* Avatar */}

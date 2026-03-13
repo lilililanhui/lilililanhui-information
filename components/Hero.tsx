@@ -4,7 +4,7 @@ export default function Hero() {
   const { skills, hero, experience } = resumeData;
 
   return (
-    <section className="mb-10 col-span-12 lg:col-span-8 border-b md:border-b-0 md:border-r border-newspaper border-opacity-90 pb-8 md:pb-0 md:pr-8">
+    <section className="mb-10 col-span-12 lg:col-span-8 border-b md:border-b-0 md:border-r border-newspaper border-opacity-90 pb-8 md:pb-0 md:pr-8 order-2 lg:order-1 mt-8 lg:mt-0">
       {/* Hero Headline Section */}
       <div className="mb-8 border-b-2 border-newspaper pb-6">
         <h2 className="text-4xl md:text-5xl lg:text-6xl font-black uppercase leading-none mb-4 tracking-tight">

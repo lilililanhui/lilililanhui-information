@@ -1,7 +1,10 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { X, Send, Bot, User, AlertCircle } from "lucide-react";
+import { X, Send, User, AlertCircle } from "lucide-react";
+import Image from "next/image";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { 
   sendMessageStream, 
   getRateLimitInfo, 
@@ -9,6 +12,74 @@ import {
   RateLimitInfo, 
   ChatError 
 } from "@/services/chatService";
+
+// Markdown 渲染组件的自定义样式
+const markdownComponents = {
+  a: ({ href, children }: { href?: string; children?: React.ReactNode }) => (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-ink underline hover:text-ink/70 break-all"
+      onClick={(e) => e.stopPropagation()}
+    >
+      {children}
+    </a>
+  ),
+  p: ({ children }: { children?: React.ReactNode }) => (
+    <p className="mb-2 last:mb-0">{children}</p>
+  ),
+  strong: ({ children }: { children?: React.ReactNode }) => (
+    <strong className="font-bold">{children}</strong>
+  ),
+  em: ({ children }: { children?: React.ReactNode }) => (
+    <em className="italic">{children}</em>
+  ),
+  ul: ({ children }: { children?: React.ReactNode }) => (
+    <ul className="list-disc list-inside mb-2 space-y-1">{children}</ul>
+  ),
+  ol: ({ children }: { children?: React.ReactNode }) => (
+    <ol className="list-decimal list-inside mb-2 space-y-1">{children}</ol>
+  ),
+  li: ({ children }: { children?: React.ReactNode }) => (
+    <li className="ml-2">{children}</li>
+  ),
+  code: ({ children }: { children?: React.ReactNode }) => (
+    <code className="bg-ink/10 px-1 py-0.5 rounded text-sm font-mono">{children}</code>
+  ),
+  pre: ({ children }: { children?: React.ReactNode }) => (
+    <pre className="bg-ink/10 p-2 rounded overflow-x-auto mb-2">{children}</pre>
+  ),
+  blockquote: ({ children }: { children?: React.ReactNode }) => (
+    <blockquote className="border-l-2 border-ink/30 pl-3 italic mb-2">{children}</blockquote>
+  ),
+  h1: ({ children }: { children?: React.ReactNode }) => (
+    <h1 className="text-lg font-bold mb-2">{children}</h1>
+  ),
+  h2: ({ children }: { children?: React.ReactNode }) => (
+    <h2 className="text-base font-bold mb-2">{children}</h2>
+  ),
+  h3: ({ children }: { children?: React.ReactNode }) => (
+    <h3 className="text-sm font-bold mb-1">{children}</h3>
+  ),
+  img: (props: React.ComponentPropsWithoutRef<'img'>) => {
+    const src = props.src as string | undefined;
+    const alt = props.alt as string | undefined;
+    // 只允许渲染本地图片（以 / 开头）
+    if (!src || !src.startsWith('/')) {
+      return <span>[图片]</span>;
+    }
+    return (
+      <Image
+        src={src}
+        alt={alt || 'image'}
+        width={200}
+        height={200}
+        className="rounded-lg my-2 max-w-full h-auto"
+      />
+    );
+  },
+};
 
 interface Message {
   id: string;
@@ -27,7 +98,7 @@ export default function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
     {
       id: "welcome",
       role: "assistant",
-      content: "你好！👋 我是 lilililanhui 的 AI 助手，很高兴见到你！你可以问我关于 lilililanhui 的技术背景、项目经历或任何你想了解的内容！",
+      content: "你好！👋 我是 lilililanhui，很高兴见到你！你可以问我的技术背景、项目经历或任何你想了解的内容！",
     },
   ]);
   const [input, setInput] = useState("");
@@ -198,8 +269,14 @@ export default function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-newspaper bg-paper-dark/50">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-ink text-paper flex items-center justify-center">
-              <Bot className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+              <Image
+                src="/images/avatar.png"
+                alt="Avatar"
+                width={40}
+                height={40}
+                className="w-full h-full object-cover"
+              />
             </div>
             <div>
               <h3 className="font-headline font-bold text-lg">lilililanhui</h3>
@@ -237,12 +314,18 @@ export default function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
               {/* Avatar */}
               <div
                 className={`
-                  w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center
-                  ${message.role === "assistant" ? "bg-ink text-paper" : "bg-paper-dark border border-newspaper"}
+                  w-8 h-8 rounded-full flex-shrink-0 overflow-hidden
+                  ${message.role === "user" ? "flex items-center justify-center bg-paper-dark border border-newspaper" : ""}
                 `}
               >
                 {message.role === "assistant" ? (
-                  <Bot className="w-4 h-4" />
+                  <Image
+                    src="/images/avatar.png"
+                    alt="Avatar"
+                    width={32}
+                    height={32}
+                    className="w-full h-full object-cover"
+                  />
                 ) : (
                   <User className="w-4 h-4" />
                 )}
@@ -251,7 +334,7 @@ export default function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
               {/* Message Bubble */}
               <div
                 className={`
-                  max-w-[75%] p-3 rounded-2xl
+                  max-w-[75%] p-3 rounded-2xl overflow-hidden
                   ${
                     message.role === "assistant"
                       ? "bg-paper-dark border border-newspaper/50 rounded-tl-sm"
@@ -259,12 +342,20 @@ export default function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
                   }
                 `}
               >
-                <p className="text-sm whitespace-pre-wrap leading-relaxed">
-                  {message.content}
+                <div 
+                  className="text-sm leading-relaxed break-words"
+                  style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}
+                >
+                  <ReactMarkdown 
+                    components={markdownComponents}
+                    remarkPlugins={[remarkGfm]}
+                  >
+                    {message.content}
+                  </ReactMarkdown>
                   {message.isStreaming && (
                     <span className="inline-block w-1.5 h-4 bg-ink/60 ml-0.5 animate-pulse" />
                   )}
-                </p>
+                </div>
               </div>
             </div>
           ))}
@@ -272,8 +363,14 @@ export default function ChatPanel({ isOpen, onClose }: ChatPanelProps) {
           {/* Loading indicator - 仅在没有流式消息时显示 */}
           {isLoading && !streamingMessageIdRef.current && (
             <div className="flex gap-3">
-              <div className="w-8 h-8 rounded-full bg-ink text-paper flex items-center justify-center flex-shrink-0">
-                <Bot className="w-4 h-4" />
+              <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                <Image
+                  src="/images/avatar.png"
+                  alt="Avatar"
+                  width={32}
+                  height={32}
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="bg-paper-dark border border-newspaper/50 rounded-2xl rounded-tl-sm p-3">
                 <div className="flex gap-1">

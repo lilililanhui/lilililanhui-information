@@ -28,7 +28,7 @@ export default function Header() {
         >
           {header.title}
         </h1>
-        <p className="text-sm md:text-lg font-bold tracking-widest mt-2 uppercase">
+        <p className="text-sm md:text-lg font-bold tracking-widest mt-2 uppercase text-center">
           {header.subtitle}
         </p>
       </div>

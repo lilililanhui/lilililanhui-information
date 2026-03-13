@@ -85,6 +85,7 @@ export const resumeData = {
     name: "lilililanhui",
     email: "lilililanhui@gmail.com",
     wechat: "ISTJ优化指南",
+    wechatQRCode: "/images/wxqrcode.jpg",
     github: "github.com/lilililanhui",
     linkedin: "linkedin.com/in/lilililanhui",
     twitter: "@lilanhui"
