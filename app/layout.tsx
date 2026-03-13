@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "The Daily Developer",
+  title: "LILANHUI TIMES",
   description: "前端架构与AI工程化前沿探索",
   icons: {
     icon: "/favicon.png",

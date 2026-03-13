@@ -15,10 +15,30 @@ export default function Hero() {
         </h3>
       </div>
 
-      {/* Experience Section (Moved up) */}
+      {/* Skills Section */}
       <div className="mb-8">
         <h3 className="text-2xl font-black uppercase mb-6 tracking-tight flex items-center border-b border-newspaper pb-2">
           <span className="bg-ink text-paper px-2 py-0.5 mr-3 text-xl">01</span>
+          专业技能
+        </h3>
+        <div className="space-y-5">
+          {skills.map((skill, i) => (
+            <div key={i} className="mb-2">
+              <h4 className="text-[15px] font-bold uppercase underline decoration-2 underline-offset-4 mb-2">
+                {skill.category}
+              </h4>
+              <p className="font-serif text-justify text-[14px] leading-relaxed">
+                {skill.items}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Experience Section */}
+      <div>
+        <h3 className="text-2xl font-black uppercase mb-6 tracking-tight flex items-center border-b border-newspaper pb-2">
+          <span className="bg-ink text-paper px-2 py-0.5 mr-3 text-xl">02</span>
           工作经历
         </h3>
         
@@ -43,26 +63,6 @@ export default function Hero() {
                 </div>
               )}
             </article>
-          ))}
-        </div>
-      </div>
-
-      {/* Skills Section */}
-      <div>
-        <h3 className="text-2xl font-black uppercase mb-6 tracking-tight flex items-center border-b border-newspaper pb-2">
-          <span className="bg-ink text-paper px-2 py-0.5 mr-3 text-xl">02</span>
-          专业技能
-        </h3>
-        <div className="space-y-5">
-          {skills.map((skill, i) => (
-            <div key={i} className="mb-2">
-              <h4 className="text-[15px] font-bold uppercase underline decoration-2 underline-offset-4 mb-2">
-                {skill.category}
-              </h4>
-              <p className="font-serif text-justify text-[14px] leading-relaxed">
-                {skill.items}
-              </p>
-            </div>
           ))}
         </div>
       </div>
