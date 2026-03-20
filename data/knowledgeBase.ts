@@ -208,11 +208,20 @@ export const knowledgeBase: KnowledgeBase = {
   ],
   // 常见问答 - 后续可添加更多 FAQ
   faq: [
-    // 示例格式：
-    // {
-    //   question: '你擅长什么技术？',
-    //   answer: '我擅长前端开发、AI应用开发...'
-    // }
+    {
+      question: '如何联系你？怎么联系你？联系方式是什么？',
+      answer: `可以通过以下方式联系我：
+- 邮箱：${resumeData.contact.email}
+- 微信公众号：${resumeData.contact.wechat}（可扫描二维码关注）
+- GitHub：${resumeData.contact.github}
+
+需要进一步沟通的话，欢迎随时联系！😊`
+    },
+    {
+      question: '你的 GitHub 地址是什么？',
+      answer: `我的 GitHub 地址是：${resumeData.contact.github}
+欢迎访问查看我的开源项目！`
+    }
   ],
 };
 
